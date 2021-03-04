@@ -26,7 +26,7 @@ const App = () => {
     <NavigationContainer>
       <Provider store={store}>
         <StatusBar barStyle="dark-content" />
-        <Tab.Navigator>
+        <Tab.Navigator tabBarOptions={{ labelStyle: { fontSize: 20 } }}>
           <Tab.Screen name="Breeds" component={BreedsStack} />
           <Tab.Screen name="Favorites" component={FavoritesScreen} />
         </Tab.Navigator>

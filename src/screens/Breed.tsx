@@ -2,7 +2,8 @@ import React, { FC, useCallback } from 'react';
 import { ActivityIndicator, Button, Image, Text, View } from 'react-native';
 
 import { useAppDispatch, useAppSelector, useCurrentBreed } from '$store/hooks';
-import { requestNewBreedImage } from '$store/breeds';
+import { addToFavorites, requestNewBreedImage } from '$store/breeds';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const BreedScreen: FC<any> = (props) => {
   const {
@@ -18,32 +19,40 @@ export const BreedScreen: FC<any> = (props) => {
     dispatch(requestNewBreedImage(id));
   }, [id, dispatch]);
 
+  const handleAddToFavorites = useCallback(() => {
+    dispatch(addToFavorites(currentBreed?.image));
+  }, [currentBreed, dispatch]);
+
   if (!currentBreed) {
     return <Text>Something went wrong...</Text>;
   }
 
   return (
-    <View>
-      {state.common.loading ? (
-        <View
-          style={{
-            width: 400,
-            height: 400,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <ActivityIndicator />
-        </View>
-      ) : (
-        <Image
-          style={{ width: 400, height: 400 }}
-          source={{ uri: currentBreed.image.url }}
-        />
-      )}
-      <Text>{currentBreed.name}</Text>
-      <Text>{currentBreed.description}</Text>
-      <Button title="Get new image" onPress={handleChangeBreedImage} />
-    </View>
+    <SafeAreaView>
+      <View style={{ width: '100%', paddingHorizontal: 10 }}>
+        {state.common.loading ? (
+          <View
+            style={{
+              width: 400,
+              height: 400,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <ActivityIndicator />
+          </View>
+        ) : (
+          <Image
+            style={{ width: '100%', height: 400 }}
+            source={{ uri: currentBreed.image.url }}
+            resizeMode="contain"
+          />
+        )}
+        <Text>{currentBreed.name}</Text>
+        <Text>{currentBreed.description}</Text>
+        <Button title="Get new image" onPress={handleChangeBreedImage} />
+        <Button title="Add to favorites" onPress={handleAddToFavorites} />
+      </View>
+    </SafeAreaView>
   );
 };

@@ -1,2 +1,2 @@
-export { BreedCard } from './BreedCard';
+export { default as BreedCard } from './BreedCard';
 export { BreedsView } from './BreedsView';

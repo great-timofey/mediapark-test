@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { RootState } from '$store';
 
 import {
@@ -19,11 +19,13 @@ function* fetchBreedsSaga() {
   yield put(setLoading(true));
 
   try {
-    const breedsResponse: { data: BreedType[] } = yield call(fetchBreeds, page + 1);
+    const breedsResponse: { data: BreedType[] } = yield call(fetchBreeds, page);
     const { data } = breedsResponse;
 
+    const cleanData = data.filter((breed) => !!breed.image);
+
     yield put(incrementPage());
-    yield put(addBreeds(data));
+    yield put(addBreeds(cleanData));
   } catch (err) {
     console.log(err);
     yield put(setError(err.message));
@@ -57,6 +59,6 @@ function* fetchBreedImageSaga(action: PayloadAction<string>) {
 }
 
 export function* breedSaga() {
-  yield takeEvery(requestBreeds, fetchBreedsSaga);
+  yield takeLatest(requestBreeds, fetchBreedsSaga);
   yield takeEvery(requestNewBreedImage, fetchBreedImageSaga);
 }

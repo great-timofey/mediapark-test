@@ -12,7 +12,7 @@ export const api = axios.create({
 export const fetchBreeds = (
   page: number,
 ): Promise<AxiosResponse<{ data: BreedType[] }>> =>
-  api.get('/breeds', { params: { limit: 5, page } });
+  api.get('/breeds', { params: { limit: 10, page } });
 
 export const getRandomBreedImage = (breedId: string): Promise<BreedImageType> =>
   api.get(`/images/search?breed_id=${breedId}`).then((result) => result.data[0]);

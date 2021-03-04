@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import { ActivityIndicator, Button, Image, Text, View } from 'react-native';
+import React, { FC, memo, useState } from 'react';
+import { ActivityIndicator, Dimensions, Image, Text, View } from 'react-native';
 
 import { BreedImageType } from '$types/breeds';
 import { TouchableOpacity } from 'react-native';
@@ -8,46 +8,52 @@ export const BreedCard: FC<{
   id: string;
   name: string;
   image: BreedImageType;
-  favorite: boolean;
   onPress: () => void;
-  onFavoritePress: (isFavorite: boolean) => void;
+  description: string;
 }> = (props) => {
-  const { favorite, onFavoritePress, name, image, onPress } = props;
+  const { name, image, onPress, description } = props;
   const [imageLoading, setImageLoading] = useState(true);
 
   return (
-    <View
+    <TouchableOpacity
       style={{
-        width: '100%',
         borderRadius: 20,
         elevation: 20,
-        backgroundColor: favorite ? 'red' : 'cyan',
         maxHeight: 200,
         flexDirection: 'row',
         marginBottom: 15,
         height: 150,
+        paddingHorizontal: 20,
+        borderColor: 'black',
+        borderWidth: 2,
       }}
+      onPress={onPress}
     >
-      <TouchableOpacity onPress={onPress}>
-        <Image
-          source={{ uri: image.url }}
-          style={{ width: 150, height: 150, marginRight: 30 }}
-          resizeMode="contain"
-          onLoadEnd={() => setImageLoading(false)}
-        />
-      </TouchableOpacity>
+      {imageLoading && (
+        <View style={{ width: 150, height: 150 }}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
+      <Image
+        source={{ uri: image.url }}
+        style={{
+          width: 150,
+          height: 150,
+          marginRight: 10,
+        }}
+        resizeMode="cover"
+        onLoadEnd={() => setImageLoading(false)}
+      />
       <View>
-        <Text style={{ fontSize: 30 }}>{name}</Text>
-        {imageLoading && (
-          <View style={{ width: 150, height: 150, backgroundColor: 'green' }}>
-            <ActivityIndicator />
-          </View>
-        )}
-        <Button
-          title={`${favorite ? 'Remove from' : 'Add to'} favorites`}
-          onPress={() => onFavoritePress(favorite)}
-        />
+        <Text adjustsFontSizeToFit numberOfLines={1} style={{ fontSize: 25 }}>
+          {name}
+        </Text>
+        <Text numberOfLines={5} style={{ fontSize: 15, maxWidth: 200 }}>
+          {description}
+        </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
+
+export default memo(BreedCard);

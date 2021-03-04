@@ -1,25 +1,17 @@
 import React, { FC, useCallback } from 'react';
-import { Button, SafeAreaView, ScrollView } from 'react-native';
-import { useAppDispatch } from '$store/hooks';
-import { BreedImageType, BreedType } from '$types/breeds';
-import { addToFavorites, removeFromFavorites, requestBreeds } from '$store/breeds';
-import { BreedCard } from './BreedCard';
 import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator, FlatList, SafeAreaView, View } from 'react-native';
+import { useAppDispatch } from '$store/hooks';
+import { BreedType } from '$types/breeds';
+import { requestBreeds } from '$store/breeds';
+import { BreedCard } from './BreedCard';
 
 export const BreedsView: FC<{
   breeds: BreedType[];
-  favorites: BreedImageType[];
   loading: boolean;
-}> = ({ breeds, favorites, loading }) => {
+}> = ({ breeds, loading }) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-
-  const handleFavoritePress = useCallback(
-    (imageData: BreedImageType) => (isFavorite: boolean) => {
-      dispatch(isFavorite ? removeFromFavorites(imageData) : addToFavorites(imageData));
-    },
-    [dispatch],
-  );
 
   const handleCardPress = useCallback(
     (breed: BreedType) => () => {
@@ -29,22 +21,33 @@ export const BreedsView: FC<{
     [navigation],
   );
 
+  const renderItem = useCallback(
+    ({ item: breed }) => (
+      <BreedCard
+        id={breed.id}
+        key={breed.id}
+        name={breed.name}
+        image={breed.image}
+        onPress={handleCardPress(breed)}
+        description={breed.description}
+      />
+    ),
+    [handleCardPress],
+  );
+
   return (
     <SafeAreaView>
-      <Button title="Fetch more" onPress={() => dispatch(requestBreeds())} />
-      <ScrollView>
-        {breeds.map((breed) => (
-          <BreedCard
-            id={breed.id}
-            key={breed.id}
-            name={breed.name}
-            image={breed.image}
-            onPress={handleCardPress(breed)}
-            favorite={favorites.includes(breed.image)}
-            onFavoritePress={handleFavoritePress(breed.image)}
-          />
-        ))}
-      </ScrollView>
+      <View style={{ paddingHorizontal: 10 }}>
+        <FlatList
+          data={breeds}
+          renderItem={renderItem}
+          keyExtractor={(breed) => breed.id}
+          onEndReached={() => dispatch(requestBreeds())}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={loading ? ActivityIndicator : <></>}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
     </SafeAreaView>
   );
 };
