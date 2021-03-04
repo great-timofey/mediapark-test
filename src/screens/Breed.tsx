@@ -4,6 +4,7 @@ import { ActivityIndicator, Button, Image, Text, View } from 'react-native';
 import { useAppDispatch, useAppSelector, useCurrentBreed } from '$store/hooks';
 import { addToFavorites, requestNewBreedImage } from '$store/breeds';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ImageWithLoader } from 'components';
 
 export const BreedScreen: FC<any> = (props) => {
   const {
@@ -20,6 +21,8 @@ export const BreedScreen: FC<any> = (props) => {
   }, [id, dispatch]);
 
   const handleAddToFavorites = useCallback(() => {
+    if (!currentBreed) return;
+
     dispatch(addToFavorites(currentBreed?.image));
   }, [currentBreed, dispatch]);
 
@@ -39,7 +42,7 @@ export const BreedScreen: FC<any> = (props) => {
               justifyContent: 'center',
             }}
           >
-            <ActivityIndicator />
+            <ActivityIndicator size="large" />
           </View>
         ) : (
           <Image

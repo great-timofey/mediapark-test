@@ -46,10 +46,12 @@ export const counterSlice = createSlice({
         state.favorites.push(action.payload);
       }
     },
-    removeFromFavorites: (state, action: PayloadAction<BreedImageType>) => {
+    removeFromFavorites: (state, action: PayloadAction<string>) => {
       const indexOfRemoved = state.favorites.findIndex(
-        (image) => image.id === action.payload.id,
+        (image) => image.id === action.payload,
       );
+
+      console.log(action.payload, indexOfRemoved);
 
       if (indexOfRemoved > -1) {
         state.favorites.splice(indexOfRemoved, 1);

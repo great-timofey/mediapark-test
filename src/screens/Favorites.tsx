@@ -1,18 +1,39 @@
 import React, { FC, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAppSelector } from '$store/hooks';
-import { Image } from 'react-native';
-import { FlatList } from 'react-native';
+import { useAppDispatch, useAppSelector } from '$store/hooks';
+import { FlatList, Text, TouchableOpacity } from 'react-native';
+import { ImageWithLoader } from '$components';
+import { View } from 'react-native';
+import { removeFromFavorites } from 'store/breeds';
 
 export const FavoritesScreen: FC<{}> = () => {
+  const dispatch = useAppDispatch();
   const { favorites } = useAppSelector((state) => state.breeds);
+
   const renderItem = useCallback(({ item: imageData }) => {
     return (
-      <Image
-        key={imageData.id}
-        style={{ width: 300, height: 300, marginBottom: 20 }}
-        source={{ uri: imageData.url }}
-      />
+      <View>
+        <ImageWithLoader
+          style={[{ width: 300, height: 300, marginBottom: 20 }]}
+          uri={imageData.url}
+        />
+        <TouchableOpacity
+          onPress={() => dispatch(removeFromFavorites(imageData.id))}
+          style={{
+            backgroundColor: 'pink',
+            height: 40,
+            width: 40,
+            position: 'absolute',
+            right: 10,
+            top: 10,
+            borderRadius: 50,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Text>X</Text>
+        </TouchableOpacity>
+      </View>
     );
   }, []);
 

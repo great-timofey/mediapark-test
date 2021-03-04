@@ -1,8 +1,9 @@
-import React, { FC, memo, useState } from 'react';
-import { ActivityIndicator, Dimensions, Image, Text, View } from 'react-native';
+import React, { FC, memo } from 'react';
+import { Text, View } from 'react-native';
 
 import { BreedImageType } from '$types/breeds';
 import { TouchableOpacity } from 'react-native';
+import ImageWithLoader from './ImageWithLoader';
 
 export const BreedCard: FC<{
   id: string;
@@ -12,7 +13,6 @@ export const BreedCard: FC<{
   description: string;
 }> = (props) => {
   const { name, image, onPress, description } = props;
-  const [imageLoading, setImageLoading] = useState(true);
 
   return (
     <TouchableOpacity
@@ -29,20 +29,16 @@ export const BreedCard: FC<{
       }}
       onPress={onPress}
     >
-      {imageLoading && (
-        <View style={{ width: 150, height: 150 }}>
-          <ActivityIndicator size="large" />
-        </View>
-      )}
-      <Image
-        source={{ uri: image.url }}
-        style={{
-          width: 150,
-          height: 150,
-          marginRight: 10,
-        }}
-        resizeMode="cover"
-        onLoadEnd={() => setImageLoading(false)}
+      <ImageWithLoader
+        uri={image.url}
+        style={[
+          {
+            width: 150,
+            height: 150,
+            marginRight: 10,
+          },
+        ]}
+        imageProps={{ resizeMode: 'cover' }}
       />
       <View>
         <Text adjustsFontSizeToFit numberOfLines={1} style={{ fontSize: 25 }}>

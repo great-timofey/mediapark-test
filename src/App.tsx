@@ -5,9 +5,10 @@ import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { store } from '$store';
+import { persistor, store } from '$store';
 import { createStackNavigator } from '@react-navigation/stack';
 import { BreedScreen, BreedsScreen, FavoritesScreen } from '$screens';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -24,13 +25,15 @@ const BreedsStack = () => {
 const App = () => {
   return (
     <NavigationContainer>
-      <Provider store={store}>
-        <StatusBar barStyle="dark-content" />
-        <Tab.Navigator tabBarOptions={{ labelStyle: { fontSize: 20 } }}>
-          <Tab.Screen name="Breeds" component={BreedsStack} />
-          <Tab.Screen name="Favorites" component={FavoritesScreen} />
-        </Tab.Navigator>
-      </Provider>
+      <PersistGate persistor={persistor} loading={null}>
+        <Provider store={store}>
+          <StatusBar barStyle="dark-content" />
+          <Tab.Navigator tabBarOptions={{ labelStyle: { fontSize: 20 } }}>
+            <Tab.Screen name="Breeds" component={BreedsStack} />
+            <Tab.Screen name="Favorites" component={FavoritesScreen} />
+          </Tab.Navigator>
+        </Provider>
+      </PersistGate>
     </NavigationContainer>
   );
 };

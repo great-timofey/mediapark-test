@@ -11,13 +11,7 @@ export const BreedsScreen: FC<{}> = () => {
     if (!breeds.list.length) {
       dispatch(requestBreeds());
     }
-  }, [breeds.list, dispatch]);
+  }, [breeds, dispatch]);
 
-  return (
-    <BreedsView
-      loading={common.loading}
-      breeds={breeds.list}
-      favorites={breeds.favorites}
-    />
-  );
+  return <BreedsView loading={common.loading} breeds={breeds.list} />;
 };
