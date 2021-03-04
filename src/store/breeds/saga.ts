@@ -4,6 +4,7 @@ import { RootState } from '$store';
 import { incrementPage, addBreeds, requestBreeds } from '.';
 import { fetchBreeds } from '$services/api';
 import { setError, setLoading } from '$store/common';
+import { BreedType } from 'types/breeds';
 
 function* fetchBreedsSaga() {
   const { page } = yield select((state: RootState) => state.breeds);
@@ -11,7 +12,7 @@ function* fetchBreedsSaga() {
   yield put(setLoading(true));
 
   try {
-    const breedsResponse = yield call(fetchBreeds, page + 1);
+    const breedsResponse: { data: BreedType[] } = yield call(fetchBreeds, page + 1);
     const { data } = breedsResponse;
 
     yield put(incrementPage());

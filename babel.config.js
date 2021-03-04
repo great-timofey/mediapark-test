@@ -12,6 +12,7 @@ module.exports = {
           $store: './src/store',
           $types: './src/types',
           $services: './src/services',
+          $screens: './src/screens',
         },
       },
     ],

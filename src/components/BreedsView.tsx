@@ -1,19 +1,16 @@
-import React, { FC, useCallback, useEffect } from 'react';
-import { BreedCard } from './BreedCard';
-import { useAppDispatch, useAppSelector } from '$store/hooks';
-import { addToFavorites, removeFromFavorites, requestBreeds } from '$store/breeds';
+import React, { FC, useCallback } from 'react';
 import { ActivityIndicator, Button, SafeAreaView, ScrollView } from 'react-native';
-import { BreedImageType } from '$types/breeds';
+import { useAppDispatch } from '$store/hooks';
+import { BreedImageType, BreedType } from '$types/breeds';
+import { addToFavorites, removeFromFavorites, requestBreeds } from '$store/breeds';
+import { BreedCard } from './BreedCard';
 
-export const BreedsView: FC<{}> = () => {
+export const BreedsView: FC<{
+  breeds: BreedType[];
+  favorites: BreedImageType[];
+  loading: boolean;
+}> = ({ breeds, favorites, loading }) => {
   const dispatch = useAppDispatch();
-  const { breeds, common } = useAppSelector((state) => state);
-
-  useEffect(() => {
-    if (!breeds.list.length) {
-      dispatch(requestBreeds());
-    }
-  }, [breeds.list, dispatch]);
 
   const handleFavoritePress = useCallback(
     (imageData: BreedImageType) => (isFavorite: boolean) => {
@@ -25,18 +22,18 @@ export const BreedsView: FC<{}> = () => {
   return (
     <SafeAreaView>
       <Button title="Fetch more" onPress={() => dispatch(requestBreeds())} />
-      {common.loading ? (
+      {loading ? (
         <ActivityIndicator />
       ) : (
         <ScrollView>
-          {breeds.list.map((breed) => (
+          {breeds.map((breed) => (
             <BreedCard
-              favorite={breeds.favorites.includes(breed.image)}
-              onFavoritePress={handleFavoritePress(breed.image)}
               id={breed.id}
               key={breed.id}
               name={breed.name}
               image={breed.image}
+              favorite={favorites.includes(breed.image)}
+              onFavoritePress={handleFavoritePress(breed.image)}
             />
           ))}
         </ScrollView>
