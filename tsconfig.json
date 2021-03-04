@@ -77,8 +77,29 @@
       "tests": [
         "tests/*"
       ],
-      "@components/*": [
+      "$components": [
+        "src/components"
+      ],
+      "$components/*": [
         "src/components/*"
+      ],
+      "$store": [
+        "src/store"
+      ],
+      "$store/*": [
+        "src/store/*"
+      ],
+      "$types": [
+        "src/types/*"
+      ],
+      "$types/*": [
+        "src/types/*"
+      ],
+      "$services": [
+        "src/services"
+      ],
+      "$services/*": [
+        "src/services/*"
       ]
     }
   },
