@@ -3,30 +3,24 @@ import { AppCommonStateType, ErrorType } from '$types/common';
 
 export const commonSliceName = 'common';
 
-interface BreedsReducerStateType {
-  common: AppCommonStateType;
-}
-
-const initialState: BreedsReducerStateType = {
-  common: {
-    loading: false,
-    error: null,
-  },
+const initialState: AppCommonStateType = {
+  loading: false,
+  error: null,
 };
 
-export const counterSlice = createSlice({
+export const commonSlice = createSlice({
   name: commonSliceName,
   initialState,
   reducers: {
     setLoading: (state, action: PayloadAction<boolean>) => {
-      state.common.loading = action.payload;
+      state.loading = action.payload;
     },
     setError: (state, action: PayloadAction<ErrorType>) => {
-      state.common.error = action.payload;
+      state.error = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setLoading, setError } = counterSlice.actions;
-export default counterSlice.reducer;
+export const { setLoading, setError } = commonSlice.actions;
+export default commonSlice.reducer;
