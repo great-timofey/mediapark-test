@@ -22,6 +22,7 @@ export const counterSlice = createSlice({
     addBreeds: (state, action: PayloadAction<BreedType[]>) => {
       state.list.push(...action.payload);
     },
+    requestNewBreedImage: (_, action: PayloadAction<string>) => {},
     updateBreedImage: (
       state,
       action: PayloadAction<{ idToUpdate: string; newImage: BreedImageType }>,
@@ -29,6 +30,7 @@ export const counterSlice = createSlice({
       const indexOfBreed = state.list.findIndex(
         (breed) => breed.id === action.payload.idToUpdate,
       );
+
       state.list[indexOfBreed].image = action.payload.newImage;
     },
     incrementPage: (state) => {
@@ -36,7 +38,13 @@ export const counterSlice = createSlice({
     },
     requestBreeds: () => {},
     addToFavorites: (state, action: PayloadAction<BreedImageType>) => {
-      state.favorites.push(action.payload);
+      const alreadyInFavorites = !!state.favorites.find(
+        (image) => image.id === action.payload.id,
+      );
+
+      if (!alreadyInFavorites) {
+        state.favorites.push(action.payload);
+      }
     },
     removeFromFavorites: (state, action: PayloadAction<BreedImageType>) => {
       const indexOfRemoved = state.favorites.findIndex(
@@ -56,6 +64,8 @@ export const {
   incrementPage,
   requestBreeds,
   addToFavorites,
+  updateBreedImage,
   removeFromFavorites,
+  requestNewBreedImage,
 } = counterSlice.actions;
 export default counterSlice.reducer;

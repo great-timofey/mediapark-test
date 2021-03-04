@@ -2,15 +2,17 @@ import React, { FC, useState } from 'react';
 import { ActivityIndicator, Button, Image, Text, View } from 'react-native';
 
 import { BreedImageType } from '$types/breeds';
+import { TouchableOpacity } from 'react-native';
 
 export const BreedCard: FC<{
   id: string;
   name: string;
   image: BreedImageType;
   favorite: boolean;
+  onPress: () => void;
   onFavoritePress: (isFavorite: boolean) => void;
 }> = (props) => {
-  const { favorite, onFavoritePress, name, image } = props;
+  const { favorite, onFavoritePress, name, image, onPress } = props;
   const [imageLoading, setImageLoading] = useState(true);
 
   return (
@@ -26,12 +28,14 @@ export const BreedCard: FC<{
         height: 150,
       }}
     >
-      <Image
-        source={{ uri: image.url }}
-        style={{ width: 150, height: 150, marginRight: 30 }}
-        resizeMode="contain"
-        onLoadEnd={() => setImageLoading(false)}
-      />
+      <TouchableOpacity onPress={onPress}>
+        <Image
+          source={{ uri: image.url }}
+          style={{ width: 150, height: 150, marginRight: 30 }}
+          resizeMode="contain"
+          onLoadEnd={() => setImageLoading(false)}
+        />
+      </TouchableOpacity>
       <View>
         <Text style={{ fontSize: 30 }}>{name}</Text>
         {imageLoading && (
