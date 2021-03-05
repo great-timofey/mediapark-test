@@ -14,7 +14,7 @@ import {
 
 import breedsSlice from './breeds';
 import commonSlice from './common';
-import { rootSaga } from 'store/saga';
+import { rootSaga } from './saga';
 
 export const sagaMiddleware = createSagaMiddleware({
   onError(err) {

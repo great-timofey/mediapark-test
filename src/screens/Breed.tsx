@@ -1,10 +1,18 @@
 import React, { FC, useCallback } from 'react';
-import { ActivityIndicator, Button, Image, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppDispatch, useAppSelector, useCurrentBreed } from '$store/hooks';
 import { addToFavorites, requestNewBreedImage } from '$store/breeds';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ImageWithLoader } from 'components';
 
 export const BreedScreen: FC<any> = (props) => {
   const {
@@ -12,6 +20,8 @@ export const BreedScreen: FC<any> = (props) => {
       params: { id },
     },
   } = props;
+
+  const navigation = useNavigation();
   const state = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   const currentBreed = useCurrentBreed(state, id);
@@ -21,7 +31,9 @@ export const BreedScreen: FC<any> = (props) => {
   }, [id, dispatch]);
 
   const handleAddToFavorites = useCallback(() => {
-    if (!currentBreed) return;
+    if (!currentBreed) {
+      return;
+    }
 
     dispatch(addToFavorites(currentBreed?.image));
   }, [currentBreed, dispatch]);
@@ -32,21 +44,17 @@ export const BreedScreen: FC<any> = (props) => {
 
   return (
     <SafeAreaView>
-      <View style={{ width: '100%', paddingHorizontal: 10 }}>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={navigation.goBack} style={styles.backButtonContainer}>
+          <Text style={styles.backButtonText}>{'<'} prev screen</Text>
+        </TouchableOpacity>
         {state.common.loading ? (
-          <View
-            style={{
-              width: 400,
-              height: 400,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" />
           </View>
         ) : (
           <Image
-            style={{ width: '100%', height: 400 }}
+            style={styles.image}
             source={{ uri: currentBreed.image.url }}
             resizeMode="contain"
           />
@@ -59,3 +67,36 @@ export const BreedScreen: FC<any> = (props) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    paddingHorizontal: 10,
+    paddingTop: 20,
+  },
+  backButtonContainer: {
+    zIndex: 1,
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    height: 50,
+    backgroundColor: 'pink',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+  },
+  backButtonText: {
+    fontSize: 20,
+  },
+  loaderContainer: {
+    width: 400,
+    height: 400,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: '100%',
+    height: 400,
+  },
+});

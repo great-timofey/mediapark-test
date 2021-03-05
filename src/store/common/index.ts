@@ -21,6 +21,5 @@ export const commonSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { setLoading, setError } = commonSlice.actions;
 export default commonSlice.reducer;

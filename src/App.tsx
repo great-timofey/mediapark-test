@@ -4,11 +4,11 @@ import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import { persistor, store } from '$store';
-import { createStackNavigator } from '@react-navigation/stack';
 import { BreedScreen, BreedsScreen, FavoritesScreen } from '$screens';
-import { PersistGate } from 'redux-persist/integration/react';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

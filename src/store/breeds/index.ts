@@ -22,6 +22,7 @@ export const counterSlice = createSlice({
     addBreeds: (state, action: PayloadAction<BreedType[]>) => {
       state.list.push(...action.payload);
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     requestNewBreedImage: (_, action: PayloadAction<string>) => {},
     updateBreedImage: (
       state,
@@ -38,8 +39,8 @@ export const counterSlice = createSlice({
     },
     requestBreeds: () => {},
     addToFavorites: (state, action: PayloadAction<BreedImageType>) => {
-      const alreadyInFavorites = !!state.favorites.find(
-        (image) => image.id === action.payload.id,
+      const alreadyInFavorites = Boolean(
+        state.favorites.find((image) => image.id === action.payload.id),
       );
 
       if (!alreadyInFavorites) {
@@ -50,8 +51,6 @@ export const counterSlice = createSlice({
       const indexOfRemoved = state.favorites.findIndex(
         (image) => image.id === action.payload,
       );
-
-      console.log(action.payload, indexOfRemoved);
 
       if (indexOfRemoved > -1) {
         state.favorites.splice(indexOfRemoved, 1);

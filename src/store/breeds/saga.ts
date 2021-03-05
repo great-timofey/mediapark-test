@@ -1,5 +1,5 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-import { RootState } from '$store';
+import { PayloadAction } from '@reduxjs/toolkit';
 
 import {
   incrementPage,
@@ -8,10 +8,10 @@ import {
   requestNewBreedImage,
   updateBreedImage,
 } from '.';
-import { fetchBreeds, getRandomBreedImage } from '$services/api';
+import { RootState } from '$store';
 import { setError, setLoading } from '$store/common';
-import { BreedImageType, BreedType } from 'types/breeds';
-import { PayloadAction } from '@reduxjs/toolkit';
+import { BreedImageType, BreedType } from '$types/breeds';
+import { fetchBreeds, getRandomBreedImage } from '$services/api';
 
 function* fetchBreedsSaga() {
   const { page } = yield select((state: RootState) => state.breeds);

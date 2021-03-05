@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { API_URL, API_KEY } from './config';
-import { BreedImageType, BreedType } from 'types/breeds';
+import { BreedImageType, BreedType } from '$types/breeds';
 
 export const api = axios.create({
   baseURL: API_URL,
